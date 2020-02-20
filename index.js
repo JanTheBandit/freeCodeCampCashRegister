@@ -1,61 +1,16 @@
-// function checkCashRegister(price, cash, cid) {
-//   let change = cash - price;
-//   let totalInDrawer = cid
-//     .map(arr => arr[1])
-//     .reduce((t, c) => t + c)
-//     .toFixed(2);
-//   if (totalInDrawer < change) {
-//     return { status: "INSUFFICIENT_FUNDS", change: [] };
-//   }
-//   let register = {};
-//   cid.forEach(arr => {
-//     register[arr[0]] = arr[1];
-//   });
-//   let keys = Object.keys(register);
-//   let { coins, dollars } = breakUp(change);
-//   console.log(coins, dollars);
-// }
-
-// function getChange(coins, dollars) {
-//   if (dollars >= 100) {
-
-//   }
-// }
-
-// function checkCashRegister(price, cash, cid) {
-//   let change = cash - price;
-//   let register = {
-//     0.01: {},
-//     0.05: {},
-//     0.1: {},
-//     0.25: {},
-//     1: {},
-//     5: {},
-//     10: {},
-//     20: {},
-//     100: {}
-//   };
-//   let keys = Object.keys(register);
-//   keys.forEach((key, i) => {
-//     let v = cid[i][1];
-
-//     register[key] = v;
-//   });
-//   return register;
-// }
-
 function checkCashRegister(price, cash, cid) {
   let register = buildRegisterObject(cid);
   let change = (cash - price).toFixed(2);
   let { cents, dollars } = breakUp(change);
-  return register;
+  dollars = breakUpDollars(dollars);
+  return dollars;
 }
 
 function buildRegisterObject(arr) {
   let register = {};
   let temp = [0.01, 0.05, 0.1, 0.25, 1, 5, 10, 20, 100];
   arr.forEach((a, i) => {
-    register[temp[i]] = a[1];
+    register[temp[i]] = a;
   });
   return register;
 }
@@ -76,18 +31,45 @@ function breakUp(num) {
   return { dollars, cents };
 }
 
-console.log(
-  checkCashRegister(19.55, 200, [
-    ["PENNY", 1.01],
-    ["NICKEL", 2.05],
-    ["DIME", 3.1],
-    ["QUARTER", 4.25],
-    ["ONE", 90],
-    ["FIVE", 55],
-    ["TEN", 20],
-    ["TWENTY", 60],
-    ["ONE HUNDRED", 100]
-  ])
-);
+function breakUpDollars(dollars) {
+  let temp = {
+    100: 0,
+    20: 0,
+    10: 0,
+    5: 0,
+    1: 0
+  };
+  dollars.forEach(dollar => {
+    if (dollar % 100 === 0) {
+      // Do something
+      console.log(dollar / 100, dollar);
+    } else if (dollar % 20 === 0) {
+      // Do something
+      console.log(dollar / 20, dollar);
+    } else if (dollar % 10 === 0) {
+      // Do something
+      console.log(dollar / 10, dollar);
+    } else {
+      // Do something
+      console.log(dollar / 1, dollar);
+    }
+  });
+}
 
-console.clear();
+breakUpDollars([100, 80, 4]);
+
+// console.log(
+//   checkCashRegister(19.55, 200, [
+//     ["PENNY", 1.01],
+//     ["NICKEL", 2.05],
+//     ["DIME", 3.1],
+//     ["QUARTER", 4.25],
+//     ["ONE", 90],
+//     ["FIVE", 55],
+//     ["TEN", 20],
+//     ["TWENTY", 60],
+//     ["ONE HUNDRED", 100]
+//   ])
+// );
+
+// console.clear();
