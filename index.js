@@ -47,8 +47,8 @@
 function checkCashRegister(price, cash, cid) {
   let register = buildRegisterObject(cid);
   let change = cash - price;
-  let { coins, dollars } = breakUp(change);
-  return dollars;
+  // let { coins, dollars } = breakUp(change);
+  // return getDollars(dollars, register);
 }
 
 function buildRegisterObject(arr) {
@@ -61,21 +61,37 @@ function buildRegisterObject(arr) {
 }
 
 function breakUp(num) {
-  let coins = parseFloat(num.toString().slice(num.toString().indexOf(".")));
-  let dollars = parseInt(num.toString().slice(0, num.toString().indexOf(".")));
-  return { coins, dollars };
+  num = num.toString();
+  let dollars = (num.includes(".")
+    ? num.split("").slice(0, num.indexOf("."))
+    : num.split("")
+  )
+    .reverse()
+    .map((dollar, i) => parseInt(`${dollar}${"0".repeat(i)}`))
+    .reverse();
+  let cents = (num.includes(".")
+    ? num.split("").slice(num.indexOf(".") + 1)
+    : 0
+  ).map((cent, i) => parseInt(`${"0".repeat(i)}${cent}`));
+  return { dollars, cents };
 }
 
-console.log(
-  checkCashRegister(19.5, 20, [
-    ["PENNY", 1.01],
-    ["NICKEL", 2.05],
-    ["DIME", 3.1],
-    ["QUARTER", 4.25],
-    ["ONE", 90],
-    ["FIVE", 55],
-    ["TEN", 20],
-    ["TWENTY", 60],
-    ["ONE HUNDRED", 100]
-  ])
-);
+// function getDollars(dollars, register) {
+//   if (dollars >= 100)
+// }
+
+console.log(breakUp(55.25));
+
+// console.log(
+//   checkCashRegister(19.5, 20, [
+//     ["PENNY", 1.01],
+//     ["NICKEL", 2.05],
+//     ["DIME", 3.1],
+//     ["QUARTER", 4.25],
+//     ["ONE", 90],
+//     ["FIVE", 55],
+//     ["TEN", 20],
+//     ["TWENTY", 60],
+//     ["ONE HUNDRED", 100]
+//   ])
+// );
