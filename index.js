@@ -48,7 +48,7 @@ function checkCashRegister(price, cash, cid) {
   let register = buildRegisterObject(cid);
   let change = (cash - price).toFixed(2);
   let { cents, dollars } = breakUp(change);
-  return [change, dollars, cents];
+  return register;
 }
 
 function buildRegisterObject(arr) {
@@ -72,7 +72,7 @@ function breakUp(num) {
   let cents = (num.includes(".")
     ? num.split("").slice(num.indexOf(".") + 1)
     : 0
-  ).map((cent, i) => `.${"0".repeat(i)}${cent}`);
+  ).map((cent, i) => parseFloat(`.${"0".repeat(i)}${cent}`));
   return { dollars, cents };
 }
 
@@ -89,3 +89,5 @@ console.log(
     ["ONE HUNDRED", 100]
   ])
 );
+
+console.clear();
