@@ -40,10 +40,9 @@ function checkCashRegister(price, cash, cid) {
         return {status: "INSUFFICIENT_FUNDS", change: []};
     }
     let change = breakUp(changeDue);
-    let {cents} = change;
-    let {dollars} = change;
+    
 
-    return dollars;
+    return getChange(register, change);
 }
 
 function breakUp(change) {
@@ -60,14 +59,30 @@ function breakDownDollars(value) {
     let hundreds = makePlaces(arr[0], 100);
     let tens = makePlaces(arr[1], 10);
     let ones = makePlaces(arr[2], 1);
-    return {HUNDRED: hundreds, TEN: tens, ONE: ones}
+    let temp = {};
+    temp.total = value;
+    if (hundreds.length >= 1) {
+        temp.hundreds = hundreds;
+    } if (tens.length >= 1) {
+        temp.tens = tens;
+    } if (ones.length >= 1) {
+        temp.ones = ones;
+    }
+    return temp;
 }
 
 function breakDownCents(value) {
     let arr = value.split("").slice(1).map((n, i) => parseFloat(`.${"0".repeat(i)}${n}`));
     let tenths = makePlaces(arr[0], .10);
     let hundreths = makePlaces(arr[1], .01);
-    return {tenths, hundreths};
+    let temp = {};
+    temp.total = value;
+    if (tenths.length >= 1) {
+        temp.tenths = tenths;
+    } if (hundreths.lenth >= 1) {
+        temp.hundreths = hundreths;
+    }
+    return temp;
 }
 
 function makePlaces(num, type) {
@@ -76,6 +91,28 @@ function makePlaces(num, type) {
         temp.push(type);
     }
     return temp;
+}
+
+function getChange(register, change) {
+    let changeDue = {};
+    let {dollars, cents} = change;
+    if (dollars.total > 0) {
+        delete dollars.total;
+        let keys = Object.keys(dollars);
+        keys.forEach(key => {
+            // Do something
+        });
+    } if (cents.total > 0) {
+        delete cents.total;
+        let keys = Object.keys(cents);
+        keys.forEach(key => {
+            let arr = cents[key];
+            arr.forEach(num => {
+                register.setChange(num);
+                console.log(register[num])
+            })
+        })
+    }
 }
 
 
