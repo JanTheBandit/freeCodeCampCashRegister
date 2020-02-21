@@ -2,9 +2,8 @@ function checkCashRegister(price, cash, cid) {
   let register = buildRegisterObject(cid);
   let change = (cash - price).toFixed(2);
   let { cents, dollars } = breakUp(change);
-  console.log(dollars);
   dollars = breakUpDollars(dollars);
-  return dollars;
+  return cents;
 }
 
 function buildRegisterObject(arr) {
@@ -51,7 +50,6 @@ function breakUpDollars(dollars) {
   }
   dollars.forEach(dollar => {
     if (dollar >= 100) {
-      // Do something
       temp["100"] = dollar / 100;
       dollar -= getTempTotal();
     }
@@ -60,7 +58,6 @@ function breakUpDollars(dollars) {
       dollar -= getTempTotal();
     }
     if (dollar >= 10) {
-      // Do something
       temp["10"] = dollar / 10;
       dollar -= getTempTotal();
     }
@@ -69,7 +66,6 @@ function breakUpDollars(dollars) {
       dollar -= getTempTotal();
     }
     if (dollar >= 1) {
-      // Do something
       temp["1"] = dollar / 1;
       dollar -= getTempTotal();
     }
@@ -77,10 +73,74 @@ function breakUpDollars(dollars) {
   return temp;
 }
 
-console.log(breakUpDollars([0, 40, 7]));
+function breakUpCents(cents) {
+  let temp = {
+    0.25: 0,
+    0.10: 0,
+    0.05: 0,
+    0.01: 0
+  };
+  function getTempTotal() {
+    return (
+      temp[".25"] * .25 +
+      temp[".10"] * .10 +
+      temp[".05"] * .05 +
+      temp[".01"] * .01
+    );
+  }
+  cents.forEach(cent => {
+    if (cent >= .25) {
+      temp["0.25"] = cent / .25;
+      cent -= getTempTotal();
+    }
+    if (cent >= .1) {
+      temp["0.10"] = cent / .1;
+      cent -= getTempTotal();
+    }
+    if (cent >= .05) {
+      temp["0.05"] = cent / .05;
+      cent -= getTempTotal();
+    }
+    if (cent >= .01) {
+      temp["0.01"] = cent / .01;
+      cent -= getTempTotal();
+    }
+  });
+  return cleanUpCents(temp);
+}
+
+function cleanUp(obj) {
+  let keys = Object.keys(obj);
+  console.log(keys)
+  keys.forEach((key, i) => {
+    if (obj[key] % 1 !== 0) {
+      let extra = (obj[key] - Math.floor(obj[key])).toFixed(2) * parseInt(key);
+      obj[key] = Math.floor(obj[key]) ;
+      obj[keys[i - 1]] += extra;
+    }
+  });
+  return obj;
+}
+
+function cleanUpCents(obj) {
+  let keys = Object.keys(obj);
+  console.log(keys)
+  keys.forEach((key, i) => {
+    if (obj[key] % 1 !== 0) {
+      let extra = (obj[key] - Math.floor(obj[key])).toFixed(2) * parseFloat(key);
+      obj[key] = Math.floor(obj[key]);
+      if (extra > .1) {
+        extra -= .10;
+
+      }
+    }
+  });
+  
+}
+
 
 // console.log(
-//   checkCashRegister(19.55, 170, [
+//   checkCashRegister(14.50, 90, [
 //     ["PENNY", 1.01],
 //     ["NICKEL", 2.05],
 //     ["DIME", 3.1],
