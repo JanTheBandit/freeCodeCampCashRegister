@@ -2,6 +2,7 @@ function checkCashRegister(price, cash, cid) {
   let register = buildRegisterObject(cid);
   let change = (cash - price).toFixed(2);
   let { cents, dollars } = breakUp(change);
+  console.log(dollars);
   dollars = breakUpDollars(dollars);
   return dollars;
 }
@@ -39,27 +40,47 @@ function breakUpDollars(dollars) {
     5: 0,
     1: 0
   };
+  function getTempTotal() {
+    return (
+      temp["100"] * 100 +
+      temp["20"] * 20 +
+      temp["10"] * 10 +
+      temp["5"] * 5 +
+      temp["1"] * 1
+    );
+  }
   dollars.forEach(dollar => {
-    if (dollar % 100 === 0) {
+    if (dollar >= 100) {
       // Do something
-      console.log(dollar / 100, dollar);
-    } else if (dollar % 20 === 0) {
+      temp["100"] = dollar / 100;
+      dollar -= getTempTotal();
+    }
+    if (dollar >= 20) {
+      temp["20"] = dollar / 20;
+      dollar -= getTempTotal();
+    }
+    if (dollar >= 10) {
       // Do something
-      console.log(dollar / 20, dollar);
-    } else if (dollar % 10 === 0) {
+      temp["10"] = dollar / 10;
+      dollar -= getTempTotal();
+    }
+    if (dollar >= 5) {
+      temp["5"] = dollar / 5;
+      dollar -= getTempTotal();
+    }
+    if (dollar >= 1) {
       // Do something
-      console.log(dollar / 10, dollar);
-    } else {
-      // Do something
-      console.log(dollar / 1, dollar);
+      temp["1"] = dollar / 1;
+      dollar -= getTempTotal();
     }
   });
+  return temp;
 }
 
-breakUpDollars([100, 80, 4]);
+console.log(breakUpDollars([0, 40, 7]));
 
 // console.log(
-//   checkCashRegister(19.55, 200, [
+//   checkCashRegister(19.55, 170, [
 //     ["PENNY", 1.01],
 //     ["NICKEL", 2.05],
 //     ["DIME", 3.1],
