@@ -97,20 +97,28 @@ function getChange(register, change) {
     let changeDue = {};
     let {dollars, cents} = change;
     if (dollars.total > 0) {
+        let total = dollars.total;
         delete dollars.total;
         let keys = Object.keys(dollars);
         keys.forEach(key => {
             // Do something
         });
     } if (cents.total > 0) {
+        let total = cents.total;
+        let quarters = register.getChange(0.25);
+        let dimes = register.getChange(.10);
+        let nickles = register.getChange(.05);
+        let pennies = register.getChange(.01)
         delete cents.total;
         let keys = Object.keys(cents);
         keys.forEach(key => {
             let arr = cents[key];
-            arr.forEach(num => {
-                register.setChange(num);
-                console.log(register[num])
-            })
+            [...arr].forEach(num => {
+                let temp = arr.pop();
+                if (total >= 50 && quarters >= total) {
+                    
+                }
+            });
         })
     }
 }
