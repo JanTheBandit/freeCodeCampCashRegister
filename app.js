@@ -39,9 +39,11 @@ function checkCashRegister(price, cash, cid) {
     if (changeDue > register.total) {
         return {status: "INSUFFICIENT_FUNDS", change: []};
     }
-    let changeArr = breakUp(changeDue);
+    let change = breakUp(changeDue);
+    let {cents} = change;
+    let {dollars} = change;
 
-    return changeArr;
+    return dollars;
 }
 
 function breakUp(change) {
